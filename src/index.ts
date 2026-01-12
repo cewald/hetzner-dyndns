@@ -85,6 +85,14 @@ app.get(
   }
 )
 
+app.get('/health', (c) => {
+  return c.json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  })
+})
+
 serve({
   fetch: app.fetch,
   port: config.port
