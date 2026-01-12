@@ -2,7 +2,7 @@
 
 A tiny dynamic DNS server built with [Hono](https://hono.dev/) that automatically updates [Hetzner DNS](https://www.hetzner.com/dns/) A records when your IP address changes.
 
-– *I need a small webserver to update the IP in my Hetzner DNS zone using [their API](https://docs.hetzner.cloud/reference/cloud#zone-rrset-actions-set-records-of-an-rrset) so my local network could be available over a specific domain if necessary. This little server runs inside of the VPC of my homelab and updates everything from inside-out.*
+– _I need a small webserver to update the IP in my Hetzner DNS zone using [their API](https://docs.hetzner.cloud/reference/cloud#zone-rrset-actions-set-records-of-an-rrset) so my local network could be available over a specific domain if necessary. This little server runs inside of the VPC of my homelab and updates everything from inside-out._
 
 ## Features
 
@@ -26,6 +26,7 @@ npm run generate-token
 ```
 
 This will generate:
+
 - A `SERVER_SECRET` (if not already set)
 - A plain token for your DynDNS client
 - A hashed token for your `.env` file
@@ -47,17 +48,20 @@ HETZNER_ARECORD_NAME=your-subdomain
 ### 4. Start the Server
 
 **Development:**
+
 ```bash
 npm run dev
 ```
 
 **Production (Node.js):**
+
 ```bash
 npm run build
 npm start
 ```
 
 **Production (Docker):**
+
 ```bash
 docker run -d \
   --name dyndns \
@@ -80,16 +84,19 @@ See [Docker Deployment](#docker-deployment) for more details.
 Check if the server is running and healthy.
 
 **Endpoint:**
+
 ```
 GET /health
 ```
 
 **Example:**
+
 ```bash
 curl http://localhost:3000/health
 ```
 
 **Response:**
+
 ```json
 {
   "status": "healthy",
@@ -101,11 +108,13 @@ curl http://localhost:3000/health
 ### Update DNS Record
 
 **REST Endpoint:**
+
 ```
 GET /update/:username/:token/:ipAddress
 ```
 
 **Example:**
+
 ```bash
 curl http://localhost:3000/update/myuser/plain-token-here/192.168.1.1
 ```
@@ -113,6 +122,7 @@ curl http://localhost:3000/update/myuser/plain-token-here/192.168.1.1
 ### Response
 
 **Success:**
+
 ```json
 {
   "success": true,
@@ -124,6 +134,7 @@ curl http://localhost:3000/update/myuser/plain-token-here/192.168.1.1
 ```
 
 **Authentication Failure:**
+
 ```json
 {
   "success": false,
@@ -132,6 +143,7 @@ curl http://localhost:3000/update/myuser/plain-token-here/192.168.1.1
 ```
 
 **Validation Error:**
+
 ```json
 {
   "success": false,
@@ -148,10 +160,12 @@ curl http://localhost:3000/update/myuser/plain-token-here/192.168.1.1
 ## Security Features
 
 ### Token Hashing
+
 - Tokens are hashed using HMAC-SHA256 with a server secret
 - Only hashed tokens are stored in environment variables
 
 ### Timing Attack Protection
+
 - Uses `timingSafeEqual()` for constant-time token comparison
 - Prevents attackers from learning token information through timing analysis
 
@@ -171,6 +185,7 @@ To integrate with Hetzner DNS, you need:
 3. **A Record Name**: The A record name you want to update (e.g., `dyndns`, `home`, `@` for root)
 
 Add these to your `.env` file:
+
 ```env
 HETZNER_API_TOKEN=your-token-here
 HETZNER_ZONE_ID=your-zone-id-here
@@ -188,6 +203,7 @@ docker build -t dyndns:latest .
 ```
 
 To use a specific Node.js version:
+
 ```bash
 docker build --build-arg NODE_VERSION=24 -t dyndns:latest .
 ```
@@ -195,6 +211,7 @@ docker build --build-arg NODE_VERSION=24 -t dyndns:latest .
 ### Running with Docker
 
 **Using environment variables:**
+
 ```bash
 docker run -d \
   --name dyndns \
@@ -211,6 +228,7 @@ docker run -d \
 ```
 
 To use a different port (e.g., 8080):
+
 ```bash
 docker run -d \
   --name dyndns \
@@ -227,6 +245,7 @@ docker run -d \
 ```
 
 **Using .env file:**
+
 ```bash
 docker run -d \
   --name dyndns \
@@ -249,7 +268,7 @@ services:
     container_name: dyndns
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - PORT=${PORT:-3000}
       - SERVER_SECRET=${SERVER_SECRET}
@@ -259,7 +278,7 @@ services:
       - HETZNER_ZONE_ID=${HETZNER_ZONE_ID}
       - HETZNER_ARECORD_NAME=${HETZNER_ARECORD_NAME}
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:3000/health']
       interval: 30s
       timeout: 3s
       retries: 3
@@ -267,6 +286,7 @@ services:
 ```
 
 Run with:
+
 ```bash
 docker-compose up -d
 ```
@@ -276,11 +296,13 @@ docker-compose up -d
 Images are automatically built and published to GitHub Container Registry when you push to the `main` branch or create a tag.
 
 **Pull the image:**
+
 ```bash
 docker pull ghcr.io/YOUR_USERNAME/dyndns:latest
 ```
 
 **Available tags:**
+
 - `latest` - Latest commit on main branch
 - `main` - Latest commit on main branch
 - `v1.0.0` - Specific version tags
@@ -294,4 +316,3 @@ docker pull ghcr.io/YOUR_USERNAME/dyndns:latest
 - ✅ **Health checks** - Built-in health monitoring
 - ✅ **Multi-arch** - Supports AMD64 and ARM64
 - ✅ **Signal handling** - Proper shutdown with dumb-init
-
