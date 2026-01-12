@@ -1,6 +1,9 @@
 # Hetzner DynDNS Server
 
-A secure Dynamic DNS server built with Hono that automatically updates Hetzner DNS A records when your IP address changes.
+A tiny dynamic DNS server built with [Hono](https://hono.dev/) that automatically updates [Hetzner DNS](https://www.hetzner.com/dns/) A records when your IP address changes.
+
+I needed a small webserver to update the IP in my Hetzner DNS zone using their API so my local network could be available over a specific domain if necessary.
+This little server runs inside of the VPC of my homelab and updates everything from inside-out.
 
 ## Features
 
