@@ -1,6 +1,6 @@
 # Hetzner DynDNS Server
 
-A secure Dynamic DNS server built with Hono that automatically updates Hetzner DNS records when your IP address changes.
+A secure Dynamic DNS server built with Hono that automatically updates Hetzner DNS A records when your IP address changes.
 
 ## Features
 
@@ -109,13 +109,12 @@ curl http://localhost:3000/update/myuser/plain-token-here/192.168.1.1
 ### Token Hashing
 - Tokens are hashed using HMAC-SHA256 with a server secret
 - Only hashed tokens are stored in environment variables
-- Plain tokens are never stored on the server
 
 ### Timing Attack Protection
 - Uses `timingSafeEqual()` for constant-time token comparison
 - Prevents attackers from learning token information through timing analysis
 
-## Hetzner DNS Integration
+## Setup Hetzner DNS
 
 To integrate with Hetzner DNS, you need:
 
