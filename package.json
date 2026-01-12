@@ -1,11 +1,15 @@
 {
   "name": "hetzner-dyndns",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "generate-token": "tsx scripts/generate-token.ts"
+    "generate-token": "tsx scripts/generate-token.ts",
+    "semantic-release": "semantic-release",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@hono/node-server": "^1.19.8",
@@ -16,6 +20,8 @@
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
+    "prettier": "^3.7.4",
+    "semantic-release": "^24.2.0",
     "tsx": "^4.7.1",
     "typescript": "^5.8.3"
   },
